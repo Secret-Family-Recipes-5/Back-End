@@ -1,11 +1,12 @@
 package com.lambdaschool.secretrecipes.models;
 
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name = "recipes")
@@ -18,30 +19,29 @@ public class Recipe extends Auditable{
     private String source;
     private int copy;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "recipe", allowSetters = true)
-    private List<Wrote> authors = new ArrayList<>();
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "sectionid")
-    @JsonIgnoreProperties("recipesInSection")
-    private Section section;
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "userid",
+            nullable = false)
+    @JsonIgnoreProperties(value = "recipes",
+            allowSetters = true)
+    private User user;
 
     public Recipe() {
 
     }
 
-    public Recipe(String recipetitle, String source, int copy) {
+    public Recipe(String recipetitle, @NotNull User user) {
         this.recipetitle = recipetitle;
-        this.source = source;
-        this.copy = copy;
+        this.user = user;
     }
 
-    public Recipe(String recipetitle, String source, int copy, Section section) {
+    public Recipe(User user, String recipetitle, String source, int copy) {
+        this.user = user;
         this.recipetitle = recipetitle;
         this.source = source;
         this.copy = copy;
-        this.section = section;
     }
 
     public long getRecipeid() {
@@ -76,27 +76,11 @@ public class Recipe extends Auditable{
         this.copy = copy;
     }
 
-    public List<Wrote> getAuthors() {
-        return authors;
+    public User getUser() {
+        return user;
     }
 
-    public void setAuthors(List<Wrote> authors) {
-        this.authors = authors;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
-    }
-
-    public void setWrotes(List<Wrote> wrotes)
-    {
-        this.authors = wrotes;
-
-        for (Wrote wrote : this.authors)
-            wrote.setrecipe(this);
+    public void setUser(User user) {
+        this.user = user;
     }
 }

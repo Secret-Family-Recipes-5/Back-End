@@ -122,6 +122,7 @@ public class UserServiceImpl
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
                 .toLowerCase());
+        newUser.setUserrecipes(user.getUserrecipes());
 
         newUser.getRoles()
                 .clear();

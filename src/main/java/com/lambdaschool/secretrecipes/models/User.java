@@ -87,6 +87,9 @@ public class User
             allowSetters = true)
     private List<Useremail> useremails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recipe> userrecipes = new ArrayList<>();
+
     /**
      * Part of the join relationship between user and role
      * connects users to the user role combination
@@ -282,6 +285,14 @@ public class User
     {
         roles.add(new UserRoles(this,
                                 role));
+    }
+
+    public List<Recipe> getUserrecipes() {
+        return userrecipes;
+    }
+
+    public void setUserrecipes(List<Recipe> userrecipes) {
+        this.userrecipes = userrecipes;
     }
 
     /**
