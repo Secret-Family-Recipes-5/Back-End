@@ -122,7 +122,7 @@ public class UserServiceImpl
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
                 .toLowerCase());
-        newUser.setUserrecipes(user.getUserrecipes());
+//        newUser.setUserrecipes(user.getUserrecipes());
 
         newUser.getRoles()
                 .clear();
@@ -146,14 +146,6 @@ public class UserServiceImpl
             }
         }
 
-        newUser.getUseremails()
-                .clear();
-        for (Useremail ue : user.getUseremails())
-        {
-            newUser.getUseremails()
-                    .add(new Useremail(newUser,
-                            ue.getUseremail()));
-        }
 
         return userrepos.save(newUser);
     }
@@ -203,19 +195,6 @@ public class UserServiceImpl
                     addUserRole(currentUser.getUserid(),
                             ur.getRole()
                                     .getRoleid());
-                }
-            }
-
-            if (user.getUseremails()
-                    .size() > 0)
-            {
-                currentUser.getUseremails()
-                        .clear();
-                for (Useremail ue : user.getUseremails())
-                {
-                    currentUser.getUseremails()
-                            .add(new Useremail(currentUser,
-                                    ue.getUseremail()));
                 }
             }
 

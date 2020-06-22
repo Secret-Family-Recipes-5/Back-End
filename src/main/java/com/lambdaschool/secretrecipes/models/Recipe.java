@@ -1,86 +1,120 @@
 package com.lambdaschool.secretrecipes.models;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe extends Auditable{
-
+@JsonIgnoreProperties(value = "hasprice")
+public class Recipe
+        extends Auditable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long recipeid;
-    private String recipetitle;
-    private String source;
-    private int copy;
 
+    @Column(nullable = false,
+            unique = true)
+    private String title;
 
-    @ManyToOne
-    @NotNull
-    @JoinColumn(name = "userid",
-            nullable = false)
-    @JsonIgnoreProperties(value = "recipes",
+    private String ingredients;
+
+    @Transient
+    public boolean hasprice = false;
+    private double price;
+
+    private String instructions;
+    private String comments;
+
+    @OneToMany(mappedBy = "recipe",
+            cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "recipe",
             allowSetters = true)
-    private User user;
+    private List<CartItem> carts = new ArrayList<>();
 
-    public Recipe() {
+    public Recipe()
+    {
 
     }
 
-    public Recipe(String recipetitle, @NotNull User user) {
-        this.recipetitle = recipetitle;
-        this.user = user;
-    }
-
-    public Recipe(User user, String recipetitle, String source, int copy) {
-        this.user = user;
-        this.recipetitle = recipetitle;
-        this.source = source;
-        this.copy = copy;
-    }
-
-    public long getRecipeid() {
+    public long getrecipeid()
+    {
         return recipeid;
     }
 
-    public void setRecipeid(long recipeid) {
+    public void setrecipeid(long recipeid)
+    {
         this.recipeid = recipeid;
     }
 
-    public String getRecipetitle() {
-        return recipetitle;
+    public String getTitle()
+    {
+        return title;
     }
 
-    public void setRecipetitle(String recipetitle) {
-        this.recipetitle = recipetitle;
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
-    public String getSource() {
-        return source;
+    public double getPrice()
+    {
+        return price;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setPrice(double price)
+    {
+        hasprice = true;
+        this.price = price;
     }
 
-    public int getCopy() {
-        return copy;
+    public String getInstructions()
+    {
+        return instructions;
     }
 
-    public void setCopy(int copy) {
-        this.copy = copy;
+    public void setInstructions(String instructions)
+    {
+        this.instructions = instructions;
     }
 
-    public User getUser() {
-        return user;
+    public String getComments()
+    {
+        return comments;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setComments(String comments)
+    {
+        this.comments = comments;
+    }
+
+    public List<CartItem> getCarts()
+    {
+        return carts;
+    }
+
+    public void setCarts(List<CartItem> carts)
+    {
+        this.carts = carts;
+    }
+
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public boolean isHasprice() {
+        return hasprice;
+    }
+
+    public void setHasprice(boolean hasprice) {
+        this.hasprice = hasprice;
     }
 }
