@@ -112,7 +112,7 @@
     </dependencies>
 
     <build>
-        <finalName>jcoulter-secretrecipes</finalName>
+        <finalName>secret-recipe-5</finalName>
 
         <plugins>
             <plugin>
