@@ -120,14 +120,14 @@ public class RolesController
      * @param id The primary key (long) of the role you wish to delete
      * @return Status of OK
      */
-    @DeleteMapping(value = "/role/{id}")
-    public ResponseEntity<?> deleteRoleById(
-            @PathVariable
-                    long id)
-    {
-        roleService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @DeleteMapping(value = "/role/{id}")
+//    public ResponseEntity<?> deleteRoleById(
+//            @PathVariable
+//                    long id)
+//    {
+//        roleService.delete(id);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * The process allows you to update a role name only!
@@ -137,19 +137,19 @@ public class RolesController
      * @param newRole The new name (String) for the role
      * @return Status of OK
      */
-    @PutMapping(value = "/role/{roleid}",
-            consumes = {"application/json"})
-    public ResponseEntity<?> putUpdateRole(
-            @PathVariable
-                    long roleid,
-            @Valid
-            @RequestBody
-                    Role newRole)
-    {
-        newRole = roleService.update(roleid,
-                                     newRole);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PutMapping(value = "/role/{roleid}",
+//            consumes = {"application/json"})
+//    public ResponseEntity<?> putUpdateRole(
+//            @PathVariable
+//                    long roleid,
+//            @Valid
+//            @RequestBody
+//                    Role newRole)
+//    {
+//        newRole = roleService.(roleid,
+//                                     newRole);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * The process allows you to update a role name only!
@@ -159,17 +159,17 @@ public class RolesController
      * @param newRole The new name (String) for the role
      * @return Status of OK
      */
-    @PatchMapping(value = "/role/{roleid}",
-            consumes = {"application/json"})
-    public ResponseEntity<?> patchUpdateRole(
-            @PathVariable
-                    long roleid,
-            @Valid
-            @RequestBody
-                    Role newRole)
-    {
-        newRole = roleService.update(roleid,
-                                     newRole);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PatchMapping(value = "/role/{roleid}",
+//            consumes = {"application/json"})
+//    public ResponseEntity<?> patchUpdateRole(
+//            @PathVariable
+//                    long roleid,
+//            @Valid
+//            @RequestBody
+//                    Role newRole)
+//    {
+//        newRole = roleService.update(roleid,
+//                                     newRole);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }

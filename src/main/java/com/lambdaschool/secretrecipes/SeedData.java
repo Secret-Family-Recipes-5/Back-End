@@ -1,70 +1,31 @@
 //package com.lambdaschool.secretrecipes;
 //
-//import com.github.javafaker.Faker;
-//import com.github.javafaker.service.FakeValuesService;
-//import com.github.javafaker.service.RandomService;
-//import com.lambdaschool.secretrecipes.models.*;
-//import com.lambdaschool.secretrecipes.services.*;
+//import com.lambdaschool.secretrecipes.models.Recipe;
+//import com.lambdaschool.secretrecipes.models.Role;
+//import com.lambdaschool.secretrecipes.models.User;
+//import com.lambdaschool.secretrecipes.models.UserRoles;
+//import com.lambdaschool.secretrecipes.services.RoleService;
+//import com.lambdaschool.secretrecipes.services.UserService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.CommandLineRunner;
 //import org.springframework.stereotype.Component;
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import java.lang.reflect.Array;
 //import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Locale;
 //
-///**
-// * SeedData puts both known and random data into the database. It implements CommandLineRunner.
-// * <p>
-// * CoomandLineRunner: Spring Boot automatically runs the run method once and only once
-// * after the application context has been loaded.
-// */
 //@Transactional
 //@Component
-//public class SeedData
-//        implements CommandLineRunner
+//public class SeedData implements CommandLineRunner
 //{
-//    /**
-//     * Connects the Role Service to this process
-//     */
-//    @Autowired
-//    RoleService roleService;
-//
-//    /**
-//     * Connects the user service to this process
-//     */
 //    @Autowired
 //    UserService userService;
 //
-////    @Autowired
-////    AuthorService authorService;
-//
 //    @Autowired
-//    RecipeService recipeService;
+//    RoleService roleService;
 //
-////    @Autowired
-////    SectionService sectionService;
-//
-//    /**
-//     * Generates test, seed data for our application
-//     * First a set of known data is seeded into our database.
-//     * Second a random set of data using Java Faker is seeded into our database.
-//     * Note this process does not remove data from the database. So if data exists in the database
-//     * prior to running this process, that data remains in the database.
-//     *
-//     * @param args The parameter is required by the parent interface but is not used in this process.
-//     */
-//    @Transactional
 //    @Override
-//    public void run(String[] args)
-//            throws
-//            Exception
+//    public void run(String... args) throws Exception
 //    {
-//        /************
-//         * Seed Users
-//         ************/
 //        Role r1 = new Role("admin");
 //        Role r2 = new Role("user");
 //        Role r3 = new Role("data");
@@ -81,10 +42,28 @@
 //                r2));
 //        admins.add(new UserRoles(new User(),
 //                r3));
-//        User u1 = new User("admin",
+//        User u1 = new User("lanakane",
 //                "password",
-//                "admin@lambdaschool.local",
+//                "lana.kane@figgisagency.local",
 //                admins);
+//
+////        String title, String source, String ingredients, String instructions, int category, @NotNull User user
+//        u1.getRecipes()
+//                .add(new Recipe(
+//                        "Mac n Cheese",
+//                        "My Nana",
+//                        "Apples, Cheese, Pie",
+//                        "Toast in Oven",
+//                        "2",
+//                        u1));
+//        u1.getRecipes()
+//                .add(new Recipe(
+//                        "Soup",
+//                        "My Own Creation",
+//                        "Water, Lettuce",
+//                        "Toast in Oven",
+//                        "1",
+//                        u1));
 //
 //        userService.save(u1);
 //
@@ -94,129 +73,63 @@
 //                r3));
 //        datas.add(new UserRoles(new User(),
 //                r2));
-//        User u2 = new User("cinnamon",
+//        User u2 = new User("sterlingarcher",
 //                "1234567",
-//                "cinnamon@lambdaschool.local",
+//                "sterling.archer@figgisagency.com",
 //                datas);
-//        userService.save(u2);
 //
-////        ArrayList<Recipe> recipes = new ArrayList<>();
-////        recipes.add(new Recipe(new User(), "Mac n Cheese", "Grandma", 2007));
+//        u2.getRecipes()
+//                .add(new Recipe(
+//                        "Mac n Cheese TEST",
+//                        "My Nana TEST",
+//                        "Apples, Cheese, Pie TEST",
+//                        "Toast in Oven TEST",
+//                        "1",
+//                        u2));
+//
+//        userService.save(u2);
 //
 //        // user
 //        ArrayList<UserRoles> users = new ArrayList<>();
 //        users.add(new UserRoles(new User(),
 //                r2));
-//        User u3 = new User("barnbarn",
-//                "ILuvM4th!",
-//                "barnbarn@lambdaschool.local",
+//        User u3 = new User("cyrilfiggis",
+//                "password",
+//                "cyril.figgis@figgisagency.com",
 //                users);
+//
+//        u3.getRecipes()
+//                .add(new Recipe(
+//                        "Mac n Cheese",
+//                        "My Nana",
+//                        "Apples, Cheese, Pie",
+//                        "Toast in Oven",
+//                        "2",
+//                        u3));
 //        userService.save(u3);
 //
-//        users = new ArrayList<>();
-//        users.add(new UserRoles(new User(),
-//                r2));
-//        User u4 = new User("puttat",
+//        User u4 = new User("admin",
 //                "password",
-//                "puttat@school.lambda",
-//                users);
+//                "admin@figgisagency.local",
+//                admins);
+//
+//        u4.getRecipes()
+//                .add(new Recipe(
+//                        "Cobbler",
+//                        "My Mom",
+//                        "Apples, Pie",
+//                        "Toast in Microwave",
+//                        "3",
+//                        u4));
+//        u4.getRecipes()
+//                .add(new Recipe(
+//                        "Mac n Cheese",
+//                        "My Nana",
+//                        "Apples, Cheese, Pie",
+//                        "Toast in Oven",
+//                        "2",
+//                        u4));
+//
 //        userService.save(u4);
-//
-//        users = new ArrayList<>();
-//        users.add(new UserRoles(new User(),
-//                r2));
-//        User u5 = new User("misskitty",
-//                "password",
-//                "misskitty@school.lambda",
-//                users);
-//        userService.save(u5);
-//
-//
-//
-//        // using JavaFaker create a bunch of regular users
-//        // https://www.baeldung.com/java-faker
-//        // https://www.baeldung.com/regular-expressions-java
-//
-//        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
-//                new RandomService());
-//        Faker nameFaker = new Faker(new Locale("en-US"));
-//
-//        for (int i = 0; i < 25; i++)
-//        {
-//            new User();
-//            User fakeUser;
-//
-//            users = new ArrayList<>();
-//            users.add(new UserRoles(new User(),
-//                    r2));
-//            fakeUser = new User(nameFaker.name()
-//                    .username(),
-//                    "password",
-//                    nameFaker.internet()
-//                            .emailAddress(),
-//                    users);
-//            userService.save(fakeUser);
-//        }
-//
-//        /************
-//         * Seed Books
-//         ************/
-//
-////        Author a1 = new Author("John", "Mitchell");
-////        Author a2 = new Author("Dan", "Brown");
-////        Author a3 = new Author("Jerry", "Poe");
-////        Author a4 = new Author("Wells", "Teague");
-////        Author a5 = new Author("George", "Gallinger");
-////        Author a6 = new Author("Ian", "Stewart");
-////
-////        a1 = authorService.save(a1);
-////        a2 = authorService.save(a2);
-////        a3 = authorService.save(a3);
-////        a4 = authorService.save(a4);
-////        a5 = authorService.save(a5);
-////        a6 = authorService.save(a6);
-////
-////        Section s1 = new Section("Vegetarian");
-////        Section s2 = new Section("Appetizers");
-////        Section s3 = new Section("Soups");
-////        Section s4 = new Section("Salads");
-////        Section s5 = new Section("Main Dishes");
-////
-////        s1 = sectionService.save(s1);
-////        s2 = sectionService.save(s2);
-////        s3 = sectionService.save(s3);
-////        s4 = sectionService.save(s4);
-////        s5 = sectionService.save(s5);
-////
-////        List<Wrote> wrote = new ArrayList<>();
-////        wrote.add(new Wrote(a6, new Recipe()));
-////        Recipe b1 = new Recipe("Mac and Cheese", "My Nana", 2001, s5);
-////        b1.setWrotes(wrote);
-////        b1 = recipeService.save(b1);
-////
-////        wrote = new ArrayList<>();
-////        wrote.add(new Wrote(a2, new Recipe()));
-////        Recipe b2 = new Recipe("Mushroom Pasta", "My Original", 2007, s1);
-////        b2.setWrotes(wrote);
-////        b2 = recipeService.save(b2);
-////
-////        wrote = new ArrayList<>();
-////        wrote.add(new Wrote(a2, new Recipe()));
-////        Recipe b3 = new Recipe("My Favorite Sandwich", "John Doe", 2009, s2);
-////        b3.setWrotes(wrote);
-////        b3 = recipeService.save(b3);
-////
-////        wrote = new ArrayList<>();
-////        wrote.add(new Wrote(a5, new Recipe()));
-////        wrote.add(new Wrote(a3, new Recipe()));
-////        Recipe b4 = new Recipe("Cool Salad", "Will Smith", 0, s4);
-////        b4.setWrotes(wrote);
-////        b4 = recipeService.save(b4);
-////
-////        wrote = new ArrayList<>();
-////        wrote.add(new Wrote(a4, new Recipe()));
-////        Recipe b5 = new Recipe("Texas BBQ", "Me", 2020, s5);
-////        b5.setWrotes(wrote);
-////        b5 = recipeService.save(b5);
 //    }
 //}

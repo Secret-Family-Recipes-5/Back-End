@@ -1,14 +1,11 @@
 package com.lambdaschool.secretrecipes.services;
 
 
-import com.lambdaschool.secretrecipes.exceptions.ResourceFoundException;
+
 import com.lambdaschool.secretrecipes.exceptions.ResourceNotFoundException;
 import com.lambdaschool.secretrecipes.handlers.HelperFunctions;
-//import com.lambdaschool.secretrecipes.models.Section;
-//import com.lambdaschool.secretrecipes.models.Wrote;
 import com.lambdaschool.secretrecipes.models.Recipe;
 import com.lambdaschool.secretrecipes.models.User;
-import com.lambdaschool.secretrecipes.repository.CartRepository;
 import com.lambdaschool.secretrecipes.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service(value = "recipeService")
 public class RecipeServiceImpl implements RecipeService {
 
@@ -24,100 +22,115 @@ public class RecipeServiceImpl implements RecipeService {
     private RecipeRepository reciperepos;
 
     @Autowired
-    private CartRepository cartrepos;
+    private RecipeService recipeService;
 
-    /**
-     * Connects this service to the auditing service in order to find the current user
-     */
     @Autowired
-    private UserAuditing userAuditing;
+    private UserService userService;
+
+    @Autowired
+    private HelperFunctions helper;
 
     @Override
-    public List<Recipe> findAll()
-    {
-        List<Recipe> list = new ArrayList<>();
-        /*
-         * findAll returns an iterator set.
-         * iterate over the iterator set and add each element to an array list.
-         */
-        reciperepos.findAll()
-                .iterator()
-                .forEachRemaining(list::add);
-        return list;
+    public List<Recipe> findAll() {
+
+        List<Recipe> recipe = new ArrayList<>();
+
+        reciperepos.findAll().iterator().forEachRemaining(recipe::add);
+        return recipe;
     }
 
     @Override
-    public Recipe findRecipeById(long id)
-    {
-        return reciperepos.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Recipe id " + id + " not found!"));
+    public Recipe findRecipeById(long id) {
+
+        return reciperepos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recipe with id " + id + " not found."));
     }
 
     @Transactional
     @Override
-    public void delete(long id)
+    public void delete(long id) {
+
+        if(reciperepos.findById(id).isPresent()) {
+
+            if(helper.isAuthorizedToMakeChange(reciperepos.findById(id).get().getUser().getUsername())) {
+
+                reciperepos.deleteById(id);
+            }
+        } else {
+
+            throw new ResourceNotFoundException("Listing with id " + id + " not found.");
+        }
+    }
+
+    @Override
+    public List<Recipe> findByUserName(String username)
     {
-        reciperepos.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Recipe id " + id + " not found!"));
-        reciperepos.deleteById(id);
-        cartrepos.removeCartWithNoRecipes();
+        return reciperepos.findAllByUser_Username(username.toLowerCase());
     }
 
     @Transactional
     @Override
-    public Recipe save(Recipe recipe)
-    {
-        if (recipe.getCarts()
-                .size() > 0)
-        {
-            throw new ResourceFoundException("Carts are not updated through Recipes");
-        }
-        ;
+    public Recipe update(long recipeid,
+                         String title,
+                         String source,
+                         String ingredients,
+                         String instructions,
+                         String category,
+                         User user) {
 
-        return reciperepos.save(recipe);
+        if (reciperepos.findById(recipeid)
+                .isPresent())
+        {
+            if (helper.isAuthorizedToMakeChange(reciperepos.findById(recipeid)
+                    .get()
+                    .getUser()
+                    .getUsername()))
+            {
+                Recipe recipe = findRecipeById(recipeid);
+                recipe.setTitle(title);
+                recipe.setSource(source);
+                recipe.setIngredients(ingredients);
+                recipe.setInstructions(instructions);
+                recipe.setCategory(category);
+                recipe.setUser(user);
+                return reciperepos.save(recipe);
+            } else
+            {
+
+                throw new ResourceNotFoundException("This user is not authorized to make change");
+            }
+        } else
+        {
+            throw new ResourceNotFoundException("Listing with id " + recipeid + " Not Found!");
+        }
     }
 
     @Transactional
     @Override
-    public Recipe update(long id,
-                          Recipe recipe)
-    {
-        if (recipe.getCarts()
-                .size() > 0)
+    public Recipe save(String title,
+                         String source,
+                         String ingredients,
+                         String instructions,
+                         String category,
+                         User user) {
+
+        User currentUser = userService.findUserById(user.getUserid());
+
+        if (helper.isAuthorizedToMakeChange(currentUser.getUsername()))
         {
-            throw new ResourceFoundException("Carts cannot be updated through this process");
-        }
+            Recipe newRecipe = new Recipe(
+                    title,
+                    source,
+                    ingredients,
+                    instructions,
+                    category,
+                    user);
 
-        Recipe currentRecipe = reciperepos.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Recipe id " + id + " not found!"));
-
-        if (recipe.getTitle() != null)
+            return reciperepos.save(newRecipe);
+        } else
         {
-            currentRecipe.setTitle(recipe.getTitle());
+            throw new ResourceNotFoundException("This user is not authorized to make change");
         }
-
-        if (recipe.hasprice)
-        {
-            currentRecipe.setPrice(recipe.getPrice());
-        }
-
-        if (recipe.getInstructions() != null)
-        {
-            currentRecipe.setInstructions(recipe.getInstructions());
-        }
-
-        if (recipe.getComments() != null)
-        {
-            currentRecipe.setComments(recipe.getComments());
-        }
-
-        reciperepos.updateRecipeInformation(userAuditing.getCurrentAuditor()
-                        .get(),
-                id,
-                currentRecipe.getTitle(),
-                currentRecipe.getPrice(),
-                currentRecipe.getTitle(),
-                currentRecipe.getComments());
-        return findRecipeById(id);
     }
+
 }
+

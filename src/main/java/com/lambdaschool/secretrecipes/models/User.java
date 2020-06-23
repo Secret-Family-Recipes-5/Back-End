@@ -3,11 +3,15 @@ package com.lambdaschool.secretrecipes.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +24,33 @@ public class User
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userid;
 
+    @Size(min = 2,
+            max = 30,
+            message = "User Name must be between 2 and 30 characters")
+    @NotNull
     @Column(nullable = false,
             unique = true)
     private String username;
 
+    @Size(min = 4,
+            message = "Password must 4 or more characters")
+    @NotNull
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Email
     private String primaryemail;
 
 
+    @ApiModelProperty(name = "user property listings",
+            value = "The property listings for this user")
     @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnoreProperties(value = "user",
             allowSetters = true)
-    private List<Cart> carts = new ArrayList<>();
+    private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL)
@@ -69,7 +85,13 @@ public class User
 
     public String getUsername()
     {
-        return username;
+        if (username == null) // this is possible when updating a user
+        {
+            return null;
+        } else
+        {
+            return username.toLowerCase();
+        }
     }
 
     public void setUsername(String username)
@@ -77,15 +99,12 @@ public class User
         this.username = username;
     }
 
-
-    public List<Cart> getCarts()
-    {
-        return carts;
+    public List<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setCarts(List<Cart> carts)
-    {
-        this.carts = carts;
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     public String getPassword() {
@@ -118,12 +137,21 @@ public class User
     }
 
     public String getPrimaryemail() {
-        return primaryemail;
+
+        if (primaryemail == null) // this is possible when updating a user
+        {
+            return null;
+        } else
+        {
+            return primaryemail.toLowerCase();
+        }
     }
 
     public void setPrimaryemail(String primaryemail) {
-        this.primaryemail = primaryemail;
+        this.primaryemail = primaryemail.toLowerCase();
     }
+
+
 
 
 

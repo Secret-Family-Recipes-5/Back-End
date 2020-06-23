@@ -3,6 +3,7 @@ package com.lambdaschool.secretrecipes.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,91 +17,60 @@ public class Recipe
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long recipeid;
 
-    @Column(nullable = false,
-            unique = true)
+    @Column(nullable = false)
     private String title;
+
+    private String source;
 
     private String ingredients;
 
-    @Transient
-    public boolean hasprice = false;
-    private double price;
-
     private String instructions;
-    private String comments;
 
-    @OneToMany(mappedBy = "recipe",
-            cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "recipe",
+    private String category;
+
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "userid",
+            nullable = false)
+    @JsonIgnoreProperties(value = "recipes",
             allowSetters = true)
-    private List<CartItem> carts = new ArrayList<>();
+    private User user;
 
-    public Recipe()
-    {
-
+    public Recipe() {
     }
 
-    public long getrecipeid()
-    {
+    public Recipe(String title, String source, String ingredients, String instructions, String category, @NotNull User user) {
+        this.title = title;
+        this.source = source;
+        this.ingredients = ingredients;
+        this.instructions = instructions;
+        this.category = category;
+        this.user = user;
+    }
+
+    public long getRecipeid() {
         return recipeid;
     }
 
-    public void setrecipeid(long recipeid)
-    {
+    public void setRecipeid(long recipeid) {
         this.recipeid = recipeid;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public double getPrice()
-    {
-        return price;
+    public String getSource() {
+        return source;
     }
 
-    public void setPrice(double price)
-    {
-        hasprice = true;
-        this.price = price;
+    public void setSource(String source) {
+        this.source = source;
     }
-
-    public String getInstructions()
-    {
-        return instructions;
-    }
-
-    public void setInstructions(String instructions)
-    {
-        this.instructions = instructions;
-    }
-
-    public String getComments()
-    {
-        return comments;
-    }
-
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
-
-    public List<CartItem> getCarts()
-    {
-        return carts;
-    }
-
-    public void setCarts(List<CartItem> carts)
-    {
-        this.carts = carts;
-    }
-
 
     public String getIngredients() {
         return ingredients;
@@ -110,11 +80,40 @@ public class Recipe
         this.ingredients = ingredients;
     }
 
-    public boolean isHasprice() {
-        return hasprice;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public void setHasprice(boolean hasprice) {
-        this.hasprice = hasprice;
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "recipeid=" + recipeid +
+                ", title='" + title + '\'' +
+                ", source='" + source + '\'' +
+                ", ingredients='" + ingredients + '\'' +
+                ", instructions='" + instructions + '\'' +
+                ", category=" + category +
+                ", user=" + user +
+                '}';
     }
 }

@@ -3,15 +3,13 @@ package com.lambdaschool.secretrecipes.services;
 import com.lambdaschool.secretrecipes.exceptions.ResourceFoundException;
 import com.lambdaschool.secretrecipes.exceptions.ResourceNotFoundException;
 import com.lambdaschool.secretrecipes.handlers.HelperFunctions;
-import com.lambdaschool.secretrecipes.models.Role;
-import com.lambdaschool.secretrecipes.models.User;
-import com.lambdaschool.secretrecipes.models.UserRoles;
-import com.lambdaschool.secretrecipes.models.Useremail;
+import com.lambdaschool.secretrecipes.models.*;
 import com.lambdaschool.secretrecipes.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,45 +21,18 @@ import java.util.List;
 public class UserServiceImpl
         implements UserService
 {
-    /**
-     * Connects this service to the User table.
-     */
     @Autowired
     private UserRepository userrepos;
 
-    /**
-     * Connects this service to the Role table
-     */
     @Autowired
     private RoleService roleService;
 
-    /**
-     * Connects this service to the auditing service in order to get current user name
-     */
     @Autowired
     private UserAuditing userAuditing;
 
-    /**
-     * Connects this service to the helper functions for this application
-     */
     @Autowired
     private HelperFunctions helper;
 
-    public User findUserById(long id)
-            throws
-            ResourceNotFoundException
-    {
-        return userrepos.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
-    }
-
-    @Override
-    public List<User> findByNameContaining(String username)
-    {
-        return userrepos.findByUsernameContainingIgnoreCase(username.toLowerCase());
-    }
-
-    @Override
     public List<User> findAll()
     {
         List<User> list = new ArrayList<>();
@@ -75,16 +46,12 @@ public class UserServiceImpl
         return list;
     }
 
-    @Transactional
-    @Override
-    public void delete(long id)
+    public User findUserById(long id) throws ResourceNotFoundException
     {
-        userrepos.findById(id)
+        return userrepos.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
-        userrepos.deleteById(id);
     }
 
-    @Override
     public User findByName(String name)
     {
         User uu = userrepos.findByUsername(name.toLowerCase());
@@ -93,6 +60,12 @@ public class UserServiceImpl
             throw new ResourceNotFoundException("User name " + name + " not found!");
         }
         return uu;
+    }
+
+    @Override
+    public List<User> findByNameContaining(String username)
+    {
+        return userrepos.findByUsernameContainingIgnoreCase(username.toLowerCase());
     }
 
     @Transactional
@@ -122,7 +95,6 @@ public class UserServiceImpl
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
                 .toLowerCase());
-//        newUser.setUserrecipes(user.getUserrecipes());
 
         newUser.getRoles()
                 .clear();
@@ -146,6 +118,19 @@ public class UserServiceImpl
             }
         }
 
+        newUser.getRecipes()
+                .clear();
+        for (Recipe l : user.getRecipes())
+        {
+
+            newUser.getRecipes()
+                    .add(new Recipe(l.getTitle(),
+                            l.getSource(),
+                            l.getIngredients(),
+                            l.getInstructions(),
+                            l.getCategory(),
+                            newUser));
+        }
 
         return userrepos.save(newUser);
     }
@@ -198,6 +183,24 @@ public class UserServiceImpl
                 }
             }
 
+            //            String title, String source, String ingredients, String instructions, int category, @NotNull User user
+            if (user.getRecipes()
+                    .size() > 0)
+            {
+                currentUser.getRecipes()
+                        .clear();
+                for (Recipe l : user.getRecipes())
+                {
+                    currentUser.getRecipes()
+                            .add(new Recipe(l.getTitle(),
+                                    l.getSource(),
+                                    l.getIngredients(),
+                                    l.getInstructions(),
+                                    l.getCategory(),
+                                    currentUser));
+                }
+            }
+
             return userrepos.save(currentUser);
         } else
         {
@@ -207,6 +210,15 @@ public class UserServiceImpl
                 throw new ResourceNotFoundException("This user is not authorized to make change");
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id)
+    {
+        userrepos.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
+        userrepos.deleteById(id);
     }
 
     @Transactional
