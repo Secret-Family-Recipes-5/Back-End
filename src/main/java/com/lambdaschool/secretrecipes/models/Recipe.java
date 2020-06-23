@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "recipes")
-@JsonIgnoreProperties(value = "hasprice")
 public class Recipe
         extends Auditable
 {
