@@ -43,13 +43,12 @@ public class User
     private String primaryemail;
 
 
-    @ApiModelProperty(name = "user property listings",
-            value = "The property listings for this user")
+    @ApiModelProperty(name = "recipes",
+            value = "The recipes for this user")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user",
-            allowSetters = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",
@@ -63,7 +62,7 @@ public class User
 
     }
 
-    public User(String username, String password, @Email String primaryemail, List<UserRoles> userRoles) {
+    public User(String username, String password, String primaryemail, List<UserRoles> userRoles) {
         setUsername(username);
         setPassword(password);
         setPrimaryemail(primaryemail);

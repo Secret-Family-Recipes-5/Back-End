@@ -9,23 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * However, we do need some web page generate done for Swagger, so we do that here.
  */
 @Configuration
-public class SwaggerWebMVC
-        implements WebMvcConfigurer
-{
-    /**
-     * Adds the Swagger web pages to Spring.
-     * This still gives the following warning
-     * <p>
-     * No mapping for GET /
-     * No mapping for GET /csrf
-     * <p>
-     * All works though
-     *
-     * @param registry the place that holds the web pages for Spring
-     */
+public class SwaggerWebMVC implements WebMvcConfigurer {
+
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry)
-    {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 

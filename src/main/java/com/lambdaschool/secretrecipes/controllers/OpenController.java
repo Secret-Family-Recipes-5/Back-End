@@ -39,12 +39,6 @@ public class OpenController
     private UserService userService;
 
     /**
-     * A method in this controller adds a new user to the application with the role User so needs access to Role Services to do this.
-     */
-    @Autowired
-    private RoleService roleService;
-
-    /**
      * This endpoint always anyone to create an account with the default role of USER. That role is hardcoded in this method.
      *
      * @param httpServletRequest the request that comes in for creating the new user
@@ -70,12 +64,6 @@ public class OpenController
         newuser.setPassword(newminuser.getPassword());
         newuser.setPrimaryemail(newminuser.getPrimaryemail());
 
-        // add the default role of user
-        List<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser,
-                                   roleService.findByName("user")));
-        newuser.setRoles(newRoles);
-
         newuser = userService.save(newuser);
 
         // set the location header for the newly created resource
@@ -97,8 +85,8 @@ public class OpenController
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setAccept(acceptableMediaTypes);
-        headers.setBasicAuth(System.getenv("lambda-client"),
-                             System.getenv("lambda-secret"));
+        headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+                System.getenv("OAUTHCLIENTSECRET"));
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type",
@@ -111,15 +99,15 @@ public class OpenController
                 newminuser.getPassword());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
-                                                                             headers);
+                headers);
 
         String theToken = restTemplate.postForObject(requestURI,
-                                                     request,
-                                                     String.class);
+                request,
+                String.class);
 
         return new ResponseEntity<>(theToken,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+                responseHeaders,
+                HttpStatus.CREATED);
     }
 
     /**

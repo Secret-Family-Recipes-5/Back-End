@@ -28,9 +28,7 @@ public class Recipe
     private String category;
 
     @ManyToOne
-    @NotNull
-    @JoinColumn(name = "userid",
-            nullable = false)
+    @JoinColumn(name = "userid")
     @JsonIgnoreProperties(value = "recipes",
             allowSetters = true)
     private User user;
@@ -38,7 +36,7 @@ public class Recipe
     public Recipe() {
     }
 
-    public Recipe(String title, String source, String ingredients, String instructions, String category, @NotNull User user) {
+    public Recipe(String title, String source, String ingredients, String instructions, String category, User user) {
         this.title = title;
         this.source = source;
         this.ingredients = ingredients;
@@ -46,6 +44,12 @@ public class Recipe
         this.category = category;
         this.user = user;
     }
+
+    public Recipe(String title, User user) {
+        this.title = title;
+        this.user = user;
+    }
+
 
     public long getRecipeid() {
         return recipeid;
@@ -102,6 +106,8 @@ public class Recipe
     public void setUser(User user) {
         this.user = user;
     }
+
+
 
     @Override
     public String toString() {

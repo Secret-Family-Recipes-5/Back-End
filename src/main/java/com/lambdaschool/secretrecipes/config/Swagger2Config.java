@@ -16,40 +16,29 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-public class Swagger2Config
-{
-    /**
-     * Configures what to document using Swagger
-     *
-     * @return A Docket which is the primary interface for Swagger configuration
-     */
+public class Swagger2Config {
     @Bean
-    public Docket api()
-    {
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors
-                              .basePackage("com.lambdaschool.secretrecipes"))
+                        .basePackage("com.e94.wunderlist"))
                 .paths(PathSelectors.regex("/.*"))
                 .build()
-                .useDefaultResponseMessages(false) // Allows only my exception responses
+                .useDefaultResponseMessages(false)
                 .apiInfo(apiEndPointsInfo());
     }
 
-    /**
-     * Configures some information related to the Application for Swagger
-     *
-     * @return ApiInfo a Swagger object containing identification information for this application
-     */
+
     private ApiInfo apiEndPointsInfo()
     {
-        return new ApiInfoBuilder().title("User Model Example")
-                .description("User Model Example")
-                .contact(new Contact("James Coulter",
-                                     "http://www.lambdaschool.com",
-                                     "james-coulter@lambdastudents.com"))
+        return new ApiInfoBuilder().title("WunderList Java Backend")
+                .description("Useful Links")
+                .contact(new Contact("Wunderlist Java Repository",
+                        "https://github.com/LambdaBWWunderlist/WebBackEndJava",
+                        "e94canales@gmail.com"))
                 .license("MIT")
-                .licenseUrl("https://github.com/LambdaSchool/java-usermodel/blob/master/LICENSE")
+                .licenseUrl("TBD")
                 .version("1.0.0")
                 .build();
     }
