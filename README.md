@@ -21,7 +21,6 @@
 ![Tables Diagram](RECIPES.png)
 
 **Users** have a *OneToMany* relationship with **Recipes** and **Roles**
-while **Recipes** has a *ManyToOne* relationship with **Users**
 
 
 ## Endpoints:
