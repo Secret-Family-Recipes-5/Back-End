@@ -31,9 +31,7 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
 
 | Action | Endpoint | Description
 |---|---|---|
-
 | POST | `/createnewuser` | Creates a new user |
-
 | POST | `/login` | Allows user to login and returns token |
 | GET | `/logout` | Destroys current session and logs a user out |
 
@@ -61,10 +59,6 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
     "username": "admin",
     "password": "password"
 }
-
-```
-#### The Data Returned by Server After Logging In:
-```
 
 ```
 
