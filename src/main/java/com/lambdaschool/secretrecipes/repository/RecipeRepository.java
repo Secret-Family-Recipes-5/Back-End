@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
-   List<Recipe> findAllByUser_Username(String name);
 }

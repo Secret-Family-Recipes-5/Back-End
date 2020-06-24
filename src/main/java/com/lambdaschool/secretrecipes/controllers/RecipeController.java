@@ -21,9 +21,9 @@ public class RecipeController {
 
 
     @PostMapping(value = "/recipe", consumes = {"application/json"})
-    public ResponseEntity<?> postNewRecipe(@Valid @RequestBody String title){
-        recipeService.addNewRecipe(title);
-        return new ResponseEntity<>("created item: " + title, HttpStatus.CREATED);
+    public ResponseEntity<?> postNewRecipe(@Valid @RequestBody Recipe recipe){
+        recipeService.addNewRecipe(recipe);
+        return new ResponseEntity<>("created item: " + recipe, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/recipes", produces = {"application/json"})

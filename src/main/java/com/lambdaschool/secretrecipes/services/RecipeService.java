@@ -9,7 +9,13 @@ import java.util.List;
 
 public interface RecipeService {
 
-    Recipe addNewRecipe(String title);
+//    Recipe addNewRecipe(String title);
+
+     Recipe addNewRecipe(Recipe recipe);
+
+
+
+//    Recipe addNewRecipe(String title, String source, String ingredients, String instructions, String category);
 
     List<Recipe> getAllRecipes();
 

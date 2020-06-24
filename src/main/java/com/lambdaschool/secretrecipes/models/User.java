@@ -39,15 +39,15 @@ public class User
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Email
+    @NotNull
+    @Column(nullable = false, unique = true)
     private String primaryemail;
 
 
     @ApiModelProperty(name = "recipes",
             value = "The recipes for this user")
     @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
     private List<Recipe> recipes = new ArrayList<>();
 
@@ -62,14 +62,14 @@ public class User
 
     }
 
-    public User(String username, String password, String primaryemail, List<UserRoles> userRoles) {
+    public User(String username, String password, String primaryemail, List<UserRoles> roles) {
         setUsername(username);
         setPassword(password);
         setPrimaryemail(primaryemail);
-        for (UserRoles ur : userRoles) {
+        for (UserRoles ur : roles) {
             ur.setUser(this);
         }
-        this.roles = userRoles;
+        this.roles = roles;
     }
 
     public long getUserid()

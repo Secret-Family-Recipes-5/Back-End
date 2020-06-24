@@ -37,16 +37,35 @@ public class RecipeServiceImpl implements RecipeService {
     @Autowired
     private HelperFunctions helper;
 
+//    @Transactional
+//    @Override
+//    public Recipe addNewRecipe(String title) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User currentUser = userRepository.findByUsername(authentication.getName());
+//        Recipe newRecipe = new Recipe(title, currentUser);
+//
+//
+//        return reciperepos.save(newRecipe);
+//    }
+
+//    String title, String source, String ingredients, String instructions, String category, User user
     @Transactional
     @Override
-    public Recipe addNewRecipe(String title) {
+    public Recipe addNewRecipe(Recipe recipe) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userRepository.findByUsername(authentication.getName());
-        Recipe newRecipe = new Recipe(title, currentUser);
-
+        Recipe newRecipe = new Recipe();
+        newRecipe.setRecipeid(recipe.getRecipeid());
+        newRecipe.setTitle(recipe.getTitle());
+        newRecipe.setSource(recipe.getSource());
+        newRecipe.setIngredients(recipe.getIngredients());
+        newRecipe.setInstructions(recipe.getInstructions());
+        newRecipe.setCategory(recipe.getCategory());
+        newRecipe.setUser(currentUser);
 
         return reciperepos.save(newRecipe);
     }
+
 
     @Override
     public List<Recipe> getAllRecipes() {
