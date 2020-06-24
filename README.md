@@ -1,4 +1,6 @@
+
 # Secret Family Recipes | Spring Boot API
+
 
 ## Getting Started:
 1. Heroku deployment can be found here: <ins>https://secret-recipe-5.herokuapp.com/</ins></i></b>
@@ -13,12 +15,14 @@
 
   }
 ```
+
 ## Overview and Table Relationships
 
 ![Tables Diagram](RECIPES.png)
 
 **Users** have a *OneToMany* relationship with **Recipes** and **Roles**
 while **Recipes** has a *ManyToOne* relationship with **Users**
+
 
 ## Endpoints:
 * Example endpoint would be **https://secret-recipe-5.herokuapp.com/users** if using deployed backend.
@@ -27,7 +31,9 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
 
 | Action | Endpoint | Description
 |---|---|---|
+
 | POST | `/createnewuser` | Creates a new user |
+
 | POST | `/login` | Allows user to login and returns token |
 | GET | `/logout` | Destroys current session and logs a user out |
 
@@ -46,6 +52,7 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
     "token_type": "bearer",
     "scope": "read trust write"
 }
+
 ```
 
 #### Shape of User Required to Login (JSON):
@@ -54,6 +61,7 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
     "username": "admin",
     "password": "password"
 }
+
 ```
 #### The Data Returned by Server After Logging In:
 ```
@@ -66,10 +74,12 @@ while **Recipes** has a *ManyToOne* relationship with **Users**
 |---|---|---|
 | GET | `/users/users` | If user is logged in, returns an array of all other users |
 | GET | `/users/user/:id` | If user is logged in, returns the user with the specified ID |
+
 | GET | `/users/contains/:query` | If user is logged in, returns the users with names containing query |
 | POST| `/users/users` | Add new user after being logged in|
 | PUT | `/users/user/:id` | Edits user with specified ID |
 |PATCH| `/users/user` | Allows you to edit specific data points without sending entire required JSON(unlike PUT) |
+
 | DELETE | `/users/user/:id` | Deletes user with specified ID |
 
 ##### NOTE: To access any of these user endpoint, you will need token authentication, which can be passed after a user login is performed.
