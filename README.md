@@ -68,6 +68,7 @@
 | GET | `/users/users` | If user is logged in, returns an array of all other users |
 | GET | `/users/user/:id` | If user is logged in, returns the user with the specified ID |
 | GET | `/users/contains/:query` | If user is logged in, returns the users with names containing query |
+| GET | `/users/currentuser` | If user is logged in, returns the logged in user's info |
 | POST| `/users/users` | Add new user after being logged in|
 | PUT | `/users/user/:id` | Edits user with specified ID |
 |PATCH| `/users/user` | Allows you to edit specific data points without sending entire required JSON(unlike PUT) |
