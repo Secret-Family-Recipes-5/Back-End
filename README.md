@@ -111,6 +111,18 @@ axios.post('http://localhost:2019/login', `grant_type=password&username=${this.s
 | PUT | `/recipes/recipe/:id` | Edits recipe with specified ID |
 | DELETE | `/recipes/recipe/:id` | Deletes recipe with specified ID |
 
+#### Shape of Recipe Required (JSON):
+```
+{
+    "title": "Apple Pie",
+    "source": "Family Tradition",
+    "ingredients": "Flour, Pie Crust, Apples",
+    "instructions": "Bake in oven on 350F for 40 min.",
+    "category": "1"
+}
+
+```
+
 #### The Data Returned by Server After GET `/recipes/recipes`:
 ```
 [
