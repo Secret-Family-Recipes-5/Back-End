@@ -36,6 +36,17 @@ public class UserController
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "returns the currently authenticated user",
+            response = User.class)
+    @GetMapping(value = "/currentuser",
+            produces = {"application/json"})
+    public ResponseEntity<?> getCurrentUserInfo(Authentication authentication)
+    {
+        User u = userService.findByName(authentication.getName());
+        return new ResponseEntity<>(u,
+                HttpStatus.OK);
+    }
+
     @PostMapping(value = "/users", consumes = {"application/json"})
     public ResponseEntity<?> postUser(@Valid @RequestBody User newUser){
         newUser.setUserid(0);
